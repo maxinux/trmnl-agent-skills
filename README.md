@@ -1,6 +1,6 @@
 # trmnl-agent-skills
 
-A template writing agent skill for the [TRMNL](https://trmnl.com), packaged for Claude Code, Cursor, OpenAI Codex CLI, Gemini CLI, and GitHub Copilot.
+A template writing agent skill for the [TRMNL](https://trmnl.com), packaged for Claude Code, Cursor, opencode, OpenAI Codex CLI, Gemini CLI, and GitHub Copilot.
 
 The skill bundles three files copied verbatim from TRMNL's core repo, curated for the **external** agent context:
 
@@ -18,6 +18,7 @@ Source of truth: [`skills/trmnl/`](skills/trmnl/). Generated outputs (committed 
 |---|---|
 | **Claude Code** | `/plugin marketplace add usetrmnl/trmnl-agent-skills`<br>then `/plugin install trmnl@trmnl-agent-skills` |
 | **Cursor** (2.5+) | Install via symlink for local dev — see [`install/README.md`](install/README.md#cursor-25). |
+| **opencode** | Already installed for Claude Code? opencode reads the same Agent Skills format from `~/.claude/skills/` — nothing to do.<br>Otherwise symlink `dist/claude-code/skills/trmnl` into `~/.config/opencode/skills/` — see [`install/README.md`](install/README.md#opencode). |
 | **OpenAI Codex** | drop `dist/codex/AGENTS.md` into your project root |
 | **Gemini CLI** | drop `dist/gemini/GEMINI.md` into your project root |
 | **GitHub Copilot** | copy `dist/copilot/.github/` into your repo |
