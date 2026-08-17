@@ -16,7 +16,7 @@ Source of truth: [`skills/trmnl/`](skills/trmnl/). Generated outputs (committed 
 
 | Harness | Command |
 |---|---|
-| **Claude Code** | `/plugin marketplace add usetrmnl/trmnl-agent-skills && /plugin install trmnl@trmnl-agent-skills` |
+| **Claude Code** | `/plugin marketplace add usetrmnl/trmnl-agent-skills`<br>then `/plugin install trmnl@trmnl-agent-skills` |
 | **Cursor** (2.5+) | Install via symlink for local dev — see [`install/README.md`](install/README.md#cursor-25). |
 | **OpenAI Codex** | drop `dist/codex/AGENTS.md` into your project root |
 | **Gemini CLI** | drop `dist/gemini/GEMINI.md` into your project root |
