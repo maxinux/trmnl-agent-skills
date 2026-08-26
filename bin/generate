@@ -106,6 +106,7 @@ end
 
 def emit_hermes(skills)
   out = File.join(DIST_DIR, 'hermes', 'skills')
+  FileUtils.mkdir_p(out)
   skills.each { |s| FileUtils.cp_r(s[:dir], out) }
 end
 

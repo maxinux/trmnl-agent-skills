@@ -417,3 +417,4 @@ design-level anti-patterns (CSS mistakes, layout errors, axis confusion, quadran
 7. **bare `return { ... }` in JS transforms** — wrap in `function transform(input)` (default runtime) or `function run(input)` (serverless). bare returns produce `"[object Object]" is not valid JSON`.
 8. **guessing at data shape in transform_js** — always call show_merge_variables first, use the actual keys (e.g. `input.data`, `input.results`). never `input.map(...)` without confirming `input` is an array.
 9. **returning `{}` or `[]` in transforms** — empty returns silently kill the template. return `input` unchanged if unsure.
+
