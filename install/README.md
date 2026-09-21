@@ -87,7 +87,7 @@ Same trade-off as Cursor — the skill works offline as a design reference witho
 
 Get your key from TRMNL dashboard → any plugin → settings → MCP. Merge this alongside any other MCP servers you already have, then restart opencode.
 
-For the whole account instead of one plugin, drop `?api_key=` and run `opencode mcp auth trmnl` for the OAuth sign-in (it registers itself, no client id needed), or use your account API key from <https://trmnl.com/account>. Account access is opening account by account — see [`SKILL.md`](../skills/trmnl/SKILL.md).
+For the whole account instead of one plugin, drop `?api_key=` and run `opencode mcp auth trmnl` for the OAuth sign-in (it registers itself, no client id needed). Account access is opening account by account — see [`SKILL.md`](../skills/trmnl/SKILL.md).
 
 ## Codex
 

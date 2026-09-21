@@ -106,7 +106,7 @@ all tools are called directly — no async dispatch needed. (external MCP client
 | **validate_liquid** | validate markup for errors and warnings without writing. |
 | **version_history** | navigate markup version history. call `undo` to go back, `redo` to go forward, `save` to persist. **always call save after undo/redo** — unsaved changes are lost on page reload. |
 | **ask_user** | ask the user a question with optional clickable options. use when unsure about design direction, data choices, or ambiguous requests. |
-| **search_api_endpoints** | search TRMNL API documentation for endpoint details. |
+| **search_api_endpoints** | search a catalog of free third-party APIs a plugin can poll for data. not TRMNL's own API. |
 
 **note:** the TRMNL Design System Template Guide and example markup are included in this system prompt. you do NOT need a tool to access them — refer to the guide content directly.
 

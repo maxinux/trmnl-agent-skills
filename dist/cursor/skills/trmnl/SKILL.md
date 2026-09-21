@@ -27,9 +27,9 @@ The skill works standalone — agents read the bundled references to write TRMNL
 | Connection | Credential | Tools you get |
 |---|---|---|
 | **One plugin** | MCP key from TRMNL dashboard → that plugin → settings → MCP tab, as `?api_key=` | The markup tools for that one plugin: read/write markup, screenshots, merge variables, logs, refresh, recipe search, design system reference |
-| **Whole account** | Sign in with OAuth (no key), or your account API key from <https://trmnl.com/account> as `?api_key=` | The six account tools: devices, playlists, plugin settings, markup, profile, API endpoint search — every action is an operation of the REST API |
+| **Whole account** | Sign in with OAuth (no key). The account API key from <https://trmnl.com/account> is for the REST API only and answers 401 on `/mcp` | The seven account tools: devices, playlists and mashups, plugin settings, markup, profile, recipes, third-party API search — every action is an operation of the REST API |
 
-Whole-account access is opening account by account. Until yours has it, the OAuth consent page turns the sign-in away and an account key answers 401. The full authentication reference is <https://trmnl.com/auth.md>.
+Whole-account access is opening account by account. Until yours has it, the OAuth consent page turns the sign-in away. The full authentication reference is <https://trmnl.com/auth.md>.
 
 ### Register the server with your agent
 
@@ -37,9 +37,9 @@ Whole-account access is opening account by account. Until yours has it, the OAut
 |---|---|---|
 | Claude Code | `claude mcp add --transport http trmnl "https://trmnl.com/mcp?api_key=<api-key>"` | `claude mcp add --transport http trmnl https://trmnl.com/mcp`, then `/mcp` in a session → sign in. A browser tab opens for consent and bounces to `http://localhost:<port>/callback`; that tab going blank afterward is normal, the CLI already took the code. |
 | Cursor | Edit `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (per-project) and add: `{"mcpServers": {"trmnl": {"url": "https://trmnl.com/mcp?api_key=<api-key>", "type": "http"}}}` — restart Cursor afterward. | Same entry without `?api_key=`; Cursor prompts for the OAuth sign-in. |
-| Codex, Gemini, generic | Add to your MCP config JSON: `{"mcpServers": {"trmnl": {"url": "https://trmnl.com/mcp?api_key=<api-key>"}}}` | Same entry without `?api_key=` if the client speaks MCP OAuth (RFC 7591 registration, PKCE); otherwise use the account API key. |
+| Codex, Gemini, generic | Add to your MCP config JSON: `{"mcpServers": {"trmnl": {"url": "https://trmnl.com/mcp?api_key=<api-key>"}}}` | Same entry without `?api_key=`; the client must speak MCP OAuth (RFC 7591 registration, PKCE). |
 
-**Verify:** ask your agent to list TRMNL MCP tools. One plugin: `MarkupsReadTool`, `MarkupsWriteTool`, `MarkupsScreenshotTool`, etc. Whole account: `AccountDevicesTool`, `AccountPlaylistsTool`, `AccountPluginSettingsTool`, `AccountMarkupTool`, `AccountProfileTool`, `APIEndpointsSearchTool`.
+**Verify:** ask your agent to list TRMNL MCP tools. One plugin: `MarkupsReadTool`, `MarkupsWriteTool`, `MarkupsScreenshotTool`, etc. Whole account: `AccountDevicesTool`, `AccountPlaylistsTool`, `AccountPluginSettingsTool`, `AccountMarkupTool`, `AccountProfileTool`, `AccountRecipesTool`, `APIEndpointsSearchTool`.
 
 **Endpoint:** `POST https://trmnl.com/mcp`. Rate limit: 60 req / 60s. OAuth scopes are capabilities: `read` (list and read), `content` (markup, plugin data and fields, playlists, creating plugin settings), `devices` (device settings, identify), `delete` (plugin settings, playlist items), `profile` (`getMe`). Ask for all five; the user ticks what they want at consent (`delete` and `profile` start unticked) and may limit the connection to some devices and plugin settings. `write` is the older name for `content` + `devices` + `delete`.
 
@@ -69,12 +69,13 @@ Each account tool takes an `action` (the REST API operation) and a `params` hash
 
 | Tool | Actions |
 |---|---|
-| `AccountProfileTool` | `getMe`, `listModels`, `listPalettes`, `listCategories` |
-| `AccountDevicesTool` | `listDevices`, `getDevice`, `updateDevice`, `identifyDevice` |
-| `AccountPluginSettingsTool` | `listPluginSettings`, `createPluginSetting`, `getPluginSettingDetails`, `updatePluginSettingFields`, `getPluginSettingData` (native plugins), `updatePluginSettingData` (webhook plugins), `getPluginSettingLogs`, `getMergeVariables` (private plugins), `deletePluginSetting` |
+| `AccountProfileTool` | `getMe`, `updateMe`, `listModels`, `listPalettes`, `listCategories` |
+| `AccountDevicesTool` | `listDevices`, `getDevice`, `updateDevice`, `identifyDevice`, `getDeviceLogs`, `clearDevicePlaylist` (destructive) |
+| `AccountPluginSettingsTool` | `listPluginSettings`, `createPluginSetting`, `getPluginSettingDetails`, `updatePluginSettingFields`, `getPluginSettingData` (native plugins), `updatePluginSettingData` (webhook plugins), `getPluginSettingLogs`, `getMergeVariables` (private plugins), `getPluginSettingFiles` / `importPluginSettingFiles` (private plugins), `uploadPluginSettingImage` (webhook_image plugins, base64), `deletePluginSetting` |
 | `AccountMarkupTool` | `readMarkup`, `writeMarkup`, `startPreview` / `getPreview`, `startRefresh` / `getRefresh` (start answers a `job_id`, poll with get) |
-| `AccountPlaylistsTool` | `listDevicePlaylist`, `addDevicePlaylistItem`, `reorderDevicePlaylist`, `copyDevicePlaylist`, `listPlaylistItems`, `updatePlaylistItem`, `deletePlaylistItem`, `getPlaylistItemSchedule`, `replacePlaylistItemSchedule` |
-| `APIEndpointsSearchTool` | search the catalog of free public APIs to poll |
+| `AccountPlaylistsTool` | `listDevicePlaylist`, `addDevicePlaylistItem`, `reorderDevicePlaylist`, `copyDevicePlaylist`, `listPlaylistItems`, `updatePlaylistItem`, `deletePlaylistItem`, `getPlaylistItemSchedule`, `replacePlaylistItemSchedule`, `refreshPlaylistItem`, `duplicatePlaylistItem`, `createDeviceMashup`, `getMashup`, `updateMashup` |
+| `AccountRecipesTool` | `searchRecipes`, `getRecipe`, `getRecipeMarkup`, `installRecipe` |
+| `APIEndpointsSearchTool` | search a catalog of free third-party APIs a private plugin can poll — not TRMNL's own API |
 
 Things that trip agents up:
 
